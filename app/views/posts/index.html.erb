@@ -1,0 +1,38 @@
+<div id="content" style="margin-left: 50px">
+  <h1>Posts</h1>
+   
+  <ul>
+  <% @posts.each do |post| %>
+    <li style="background-color: #f7f7f7; width: 900px; padding: 10px; margin: 20px">
+      <h4><%= link_to post.title, post %> (by <%= post.author %>)</h4>
+        
+      <p><%= post.content %></p>
+
+      <h5>New Comment</h5>
+      <div id="comment-<% post.id %>">
+        <%= form_for [post, Comment.new], :remote => true, :html => { :data_format => :json } do |f| %>
+            <%= f.text_area :content, :rows => 10, :style => "width: 620px; height: 40px" %>
+            <p><%= f.submit %></p>
+        <% end %>
+        <script type="text/javascript">
+          $("#network-update-comments-<%= post.id %>").hide();
+          function show_comments(id) {
+            sel  = "#network-update-comments-"+id;
+            $(sel).toggle();
+          } 
+        </script>
+      </div>
+      
+      <div class="actions" style="font-size: 8px">
+        <%= link_to 'Show', post %>
+        <%= link_to 'Edit', edit_post_path(post) %>
+        <%= link_to 'Destroy', post, confirm: 'Are you sure?', method: :delete %>
+     </div>
+    </li>
+  <% end %>
+  </ul>
+  
+
+
+</div>
+<%= link_to 'New Post', new_post_path %>
